@@ -1,0 +1,33 @@
+{
+    "name": "pyrech/gcode-estimator",
+    "description": "Calculate filament length/height/cost used in gcode file",
+    "keywords": ["3d", "printer", "3d-print", "filament", "estimate", "length", "height", "cost"],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Loïck Piera",
+            "email": "pyrech@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Pyrech\\GcodeEstimator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Pyrech\\GcodeEstimator\\tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.2"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.0",
+        "symfony/phpunit-bridge": "^5.0"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
