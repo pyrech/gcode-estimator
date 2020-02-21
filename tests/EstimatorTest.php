@@ -14,6 +14,7 @@ namespace Pyrech\GcodeEstimator\Tests;
 use PHPUnit\Framework\TestCase;
 use Pyrech\GcodeEstimator\Estimate;
 use Pyrech\GcodeEstimator\Estimator;
+use Pyrech\GcodeEstimator\Exception\FileNotReadable;
 use Pyrech\GcodeEstimator\Filament;
 
 class EstimatorTest extends TestCase
@@ -42,7 +43,7 @@ class EstimatorTest extends TestCase
         }
     }
 
-    public function testItEstimatesOnlyWeightWhenNoFilamentGiven()
+    public function testItEstimatesOnlyLengthWhenNoFilamentGiven()
     {
         $estimate = (new Estimator())->estimate(__DIR__ . '/../tests/fixtures/Bulbasaur/model.gcode');
 
@@ -53,7 +54,7 @@ class EstimatorTest extends TestCase
 
     public function testItThrowsExceptionWhenInvalidFile()
     {
-        self::expectException(\Exception::class);
+        self::expectException(FileNotReadable::class);
 
         (new Estimator())->estimate(__DIR__ . '/../tests/fixtures/yolo.gcode');
     }

@@ -11,14 +11,26 @@
 
 namespace Pyrech\GcodeEstimator;
 
+use Pyrech\GcodeEstimator\Exception\FileNotReadable;
+use Pyrech\GcodeEstimator\Exception\InvalidGcode;
+
 class Estimator
 {
     const LENGTH_UNIT_MM = 'mm';
     const LENGTH_UNIT_INCH = 'inch';
 
+    /**
+     * @throws FileNotReadable
+     * @throws InvalidGcode
+     */
     public function estimate(string $gcodeFilename, Filament $filament = null): Estimate
     {
         $length = $this->estimateLengthUsed($gcodeFilename);
+
+        if ($length <= 0) {
+            throw new InvalidGcode('Invalid filament length estimated');
+        }
+
         $weight = null;
         $cost = null;
 
@@ -32,7 +44,11 @@ class Estimator
 
     private function estimateLengthUsed(string $gcodeFilename): float
     {
-        $file = new \SplFileObject($gcodeFilename);
+        try {
+            $file = new \SplFileObject($gcodeFilename);
+        } catch (\Exception $e) {
+            throw new FileNotReadable($gcodeFilename, $e);
+        }
 
         $totalLengths = [
             self::LENGTH_UNIT_MM => 0,
@@ -43,8 +59,7 @@ class Estimator
         $currentUnit = self::LENGTH_UNIT_MM;
         $lastExtruderPosition = 0;
 
-        while (!$file->eof()) {
-            $line = $file->fgets();
+        foreach ($file as $line) {
             $operation = new GcodeOperation($line);
 
             switch ($operation->getCommand()) {
@@ -81,9 +96,6 @@ class Estimator
                     break;
             }
         }
-
-        // Unset the file to call __destruct(), closing the file handle.
-        $file = null;
 
         return $totalLengths[self::LENGTH_UNIT_MM] + $totalLengths[self::LENGTH_UNIT_INCH] * 25.4;
     }
