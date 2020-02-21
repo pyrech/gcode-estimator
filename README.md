@@ -49,7 +49,7 @@ $estimate = $estimator->estimate($absolutePathToGcode, $filament);
 
 $estimate->getLength(); // returns the length of filament used (in mm);
 $estimate->getWeight(); // returns the weight of filament used (in g);
-$estimate->getLength(); // returns the cost of filament used (in whatever currency you specified);
+$estimate->getCost();   // returns the cost of filament used (in whatever currency you specified);
 ```
 
 ## Further documentation
