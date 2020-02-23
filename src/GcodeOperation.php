@@ -16,8 +16,9 @@ class GcodeOperation
     private $command;
     private $arguments;
     private $comment;
+    private $lineNumber;
 
-    public function __construct(string $line)
+    public function __construct(string $line, int $lineNumber)
     {
         $code = trim($line);
         $commentPosition = strpos($code, ';');
@@ -33,6 +34,7 @@ class GcodeOperation
         $this->command = trim(array_shift($parts));
         $this->arguments = array_filter($parts);
         $this->comment = $comment;
+        $this->lineNumber = $lineNumber;
     }
 
     public function getCommand(): ?string
@@ -48,6 +50,11 @@ class GcodeOperation
     public function getComment(): ?string
     {
         return $this->comment;
+    }
+
+    public function getLineNumber(): int
+    {
+        return $this->lineNumber;
     }
 
     public function getExtruderValue(): ?float

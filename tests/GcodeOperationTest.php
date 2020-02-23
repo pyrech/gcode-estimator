@@ -21,11 +21,12 @@ class GcodeOperationTest extends TestCase
      */
     public function testItParsesLines(string $line, string $command, array $arguments, ?string $comment): void
     {
-        $operation = new GcodeOperation($line);
+        $operation = new GcodeOperation($line, 1);
 
         self::assertSame($command, $operation->getCommand());
         self::assertSame($arguments, $operation->getArguments());
         self::assertSame($comment, $operation->getComment());
+        self::assertSame(1, $operation->getLineNumber());
     }
 
     public function getLines()
@@ -46,9 +47,10 @@ class GcodeOperationTest extends TestCase
      */
     public function testItExtractExtruderValue(string $line, ?float $extruderValue): void
     {
-        $operation = new GcodeOperation($line);
+        $operation = new GcodeOperation($line, 1);
 
         self::assertSame($extruderValue, $operation->getExtruderValue());
+        self::assertSame(1, $operation->getLineNumber());
     }
 
     public function getExtruderLines()

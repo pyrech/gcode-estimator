@@ -26,20 +26,20 @@ class EstimatorTest extends TestCase
     {
         $estimate = (new Estimator())->estimate($filename, $filament);
 
-        self::assertLessThanOrEqual(5, abs(
+        self::assertLessThanOrEqual(0.5, abs(
             ($expectedEstimate->getLength() - $estimate->getLength()) * 100 / $expectedEstimate->getLength()
-        ), 'Expected length precision to be lower than 5%');
+        ), 'Expected length precision to be lower than 0.5%');
 
         if (null !== $expectedEstimate->getWeight()) {
-            self::assertLessThanOrEqual(5, abs(
+            self::assertLessThanOrEqual(2, abs(
                 ($expectedEstimate->getWeight() - $estimate->getWeight()) * 100 / $expectedEstimate->getWeight()
-            ), 'Expected weight precision to be lower than 5%');
+            ), 'Expected weight precision to be lower than 2%');
         }
 
         if (null !== $expectedEstimate->getCost()) {
-            self::assertLessThanOrEqual(5, abs(
+            self::assertLessThanOrEqual(2, abs(
                 ($expectedEstimate->getCost() - $estimate->getCost()) * 100 / $expectedEstimate->getCost()
-            ), 'Expected cost precision to be lower than 5%');
+            ), 'Expected cost precision to be lower than 2%');
         }
     }
 
@@ -66,7 +66,14 @@ class EstimatorTest extends TestCase
                 continue;
             }
 
-            yield [$fixture->getRealPath() . '/model.gcode', require($fixture->getRealPath() . '/expected.php'), include($fixture->getRealPath() . '/filament.php') ?? null];
+            $expectedFile = $fixture->getRealPath() . '/expected.php';
+            $filamentFile = $fixture->getRealPath() . '/filament.php';
+
+            yield [
+                $fixture->getRealPath() . '/model.gcode',
+                require($expectedFile),
+                file_exists($filamentFile) ? include($filamentFile) : null,
+            ];
         }
     }
 }
