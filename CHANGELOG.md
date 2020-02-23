@@ -1,6 +1,6 @@
 # Changes between versions
 
-## Not yet released
+## 1.0.1 (2020-02-23)
 
 * Add better error handling
 * Tweak length computation (error < 0.5%)
