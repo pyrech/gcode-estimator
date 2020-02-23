@@ -59,23 +59,31 @@ class Estimator
         $currentUnit = self::LENGTH_UNIT_MM;
         $lastExtruderPosition = 0;
 
-        foreach ($file as $line) {
-            $operation = new GcodeOperation($line);
+        foreach ($file as $index => $line) {
+            $operation = new GcodeOperation($line, $index + 1);
+
+            if (empty($operation->getCommand())) {
+                continue;
+            }
 
             switch ($operation->getCommand()) {
                 case 'G0':
                 case 'G1':
                 case 'G2':
                 case 'G3':
-                    $length = $operation->getExtruderValue();
+                    $value = $operation->getExtruderValue();
 
-                    if ($positioningAbsolute) {
-                        $totalLengths[$currentUnit] += $length - $lastExtruderPosition;
-                    } else {
+                    if (null !== $value) {
+                        if ($positioningAbsolute) {
+                            $length = $value - $lastExtruderPosition;
+                            $lastExtruderPosition = $value;
+                        } else {
+                            $length = $value;
+                            $lastExtruderPosition = 0;
+                        }
+
                         $totalLengths[$currentUnit] += $length;
                     }
-
-                    $lastExtruderPosition = $length;
                     break;
                 case 'G20':
                     $currentUnit = self::LENGTH_UNIT_INCH;
@@ -84,7 +92,11 @@ class Estimator
                     $currentUnit = self::LENGTH_UNIT_MM;
                     break;
                 case 'G92':
-                    $lastExtruderPosition = $operation->getExtruderValue();
+                    $value = $operation->getExtruderValue();
+
+                    if (null !== $value || 0 === \count($operation->getArguments())) {
+                        $lastExtruderPosition = $value ?? 0;
+                    }
                     break;
                 case 'G90':
                 case 'M82':
