@@ -5,6 +5,18 @@ used for a 3D print through the corresponding gcode file.
 
 Requires PHP >= 7.2.
 
+## Features
+
+Unlike other implementations, this library supports most of g-code operations commonly used by 3d printers:
+
+- all kind of moves (rapid, linear, clockwise arc, counter-clockwise arc)
+- absolute and relative positionings
+- switch between absolute/relative modes
+- current position reset
+- millimeter and inche units
+
+Estimations should be quite realist whatever the slicer/printer you use.
+
 ## Installation
 
 Use [Composer](http://getcomposer.org/) to install GcodeEstimator in your project:
