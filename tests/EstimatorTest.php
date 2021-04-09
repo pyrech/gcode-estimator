@@ -71,8 +71,8 @@ class EstimatorTest extends TestCase
 
             yield [
                 $fixture->getRealPath() . '/model.gcode',
-                require($expectedFile),
-                file_exists($filamentFile) ? include($filamentFile) : null,
+                require $expectedFile,
+                file_exists($filamentFile) ? include $filamentFile : null,
             ];
         }
     }
