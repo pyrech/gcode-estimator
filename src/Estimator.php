@@ -35,7 +35,7 @@ class Estimator
         $cost = null;
 
         if ($filament) {
-            $weight = $filament->getDensity() * ($length / 10) * M_PI * pow($filament->getDiameter() / 2 / 10, 2);
+            $weight = $filament->getDensity() * ($length / 10) * \M_PI * ($filament->getDiameter() / 2 / 10) ** 2;
             $cost = $filament->getSpoolPrice() * $weight / $filament->getSpoolWeight();
         }
 
