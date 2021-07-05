@@ -16,8 +16,8 @@ use Pyrech\GcodeEstimator\Exception\InvalidGcode;
 
 class Estimator
 {
-    const LENGTH_UNIT_MM = 'mm';
-    const LENGTH_UNIT_INCH = 'inch';
+    public const LENGTH_UNIT_MM = 'mm';
+    public const LENGTH_UNIT_INCH = 'inch';
 
     /**
      * @throws FileNotReadable
